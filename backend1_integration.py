@@ -291,7 +291,11 @@ def chat_with_agents(file_type, file_content, query_engine=None):
 
     if file_type == "csv":
         # 1) Clean
-        df = pd.read_csv(file_content, encoding='latin-1')
+        try:
+            df = pd.read_csv(file_content, encoding='utf-8')
+        except UnicodeDecodeError:
+            df = pd.read_csv(file_content, encoding='latin-1')
+
         df_clean, cleaning_info = clean_and_summarize(df)
 
         # 2) Describe
